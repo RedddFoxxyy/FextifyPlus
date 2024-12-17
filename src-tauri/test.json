@@ -1,0 +1,35 @@
+{
+  "productName": "fextifyplus",
+  "identifier": "fextify.face",
+  "version": "2.0.0",
+  "build": {
+    "beforeBuildCommand": "",
+    "beforeDevCommand": "",
+    "devUrl": "../dist",
+    "frontendDist": "../dist"
+  },
+  "app": {
+    "security": {
+      "csp": null
+    },
+    "windows": [
+      {
+        "fullscreen": false,
+        "height": 600,
+        "resizable": true,
+        "title": "Tauri App",
+        "width": 800,
+        "maximized": true
+      }
+    ]
+  },
+  "bundle": {
+    "active": true,
+      "targets": "all",
+      "icon": [
+        "icons/icon.png",
+        "icons/icon.ico"
+      ]
+  },
+  "plugins": {}
+}

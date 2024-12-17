@@ -1,40 +1,61 @@
 {
+  "productName": "fextifyplus",
+  "identifier": "fextify.face",
+  "version": "2.0.0",
   "build": {
-    "beforeDevCommand": "",
     "beforeBuildCommand": "",
-    "devPath": "../src",
-    "distDir": "../src",
-    "withGlobalTauri": true
+    "beforeDevCommand": ""
   },
-  "package": {
-    "productName": "fextifyplus",
-    "version": "2.0.0"
-  },
-  "tauri": {
-    "allowlist": {
-      "all": false
-    },
-    "bundle": {
-      "active": true,
-      "targets": "all",
-      "identifier": "fextify.face",
-      "icon": [
-        "icons/icon.png",
-        "icons/icon.ico"
-      ]
-    },
+  "app": {
     "security": {
       "csp": null
     },
     "windows": [
       {
         "fullscreen": false,
+        "height": 600,
         "resizable": true,
-        "title": "Fextify",
-        "width": 1920,
-        "height": 1080,
+        "title": "Tauri App",
+        "width": 800,
         "maximized": true
       }
     ]
+  },
+  "bundle": {
+    "active": true,
+      "targets": "all",
+      "icon": [
+        "icons/icon.png",
+        "icons/icon.ico"
+      ]
+  },
+  "plugins": {
+    "clipboard": {
+        "active": true 
+    },
+    "dialog": {
+        "active": true,
+        "title": "Fextify+",
+        "filters": [
+            {
+                "name": "Images",
+                "extensions": ["png", "jpg", "jpeg", "gif"]
+            },
+            {
+                "name": "All Files",
+                "extensions": ["*"]
+            }
+        ]
+    },
+    "shell": {
+        "active": true,
+        "scope": {
+            "allow": [
+                "python",
+                "pip",
+                "git"
+            ]
+        }
+    }
   }
 }

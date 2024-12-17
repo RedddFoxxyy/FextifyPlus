@@ -14,8 +14,9 @@ use directories::ProjectDirs;
 use lazy_static::lazy_static;
 use std::sync::Mutex;
 
-use tauri_plugin_clipboard::{ClipboardExt, ClipKind};
+use tauri_plugin_clipboard_manager::{ClipboardExt};
 use tauri_plugin_dialog::DialogExt;
+use tauri_plugin_shell::ShellExt;
 
 #[derive(Serialize, Deserialize)]
 struct JsonData {
@@ -391,8 +392,9 @@ fn main() {
     save_config();
 
     tauri::Builder::default()
-        .plugin(tauri_plugin_clipboard::init())
+        .plugin(tauri_plugin_clipboard_manager::init())
         .plugin(tauri_plugin_dialog::init())
+        .plugin(tauri_plugin_shell::init())
         .invoke_handler(tauri::generate_handler![
             save_title,
             save_file,
