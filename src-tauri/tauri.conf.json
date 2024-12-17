@@ -4,7 +4,8 @@
   "version": "2.0.0",
   "build": {
     "beforeBuildCommand": "",
-    "beforeDevCommand": ""
+    "beforeDevCommand": "",
+    "frontendDist": "../src"
   },
   "app": {
     "security": {
@@ -32,30 +33,8 @@
   "plugins": {
     "clipboard": {
         "active": true 
-    },
-    "dialog": {
-        "active": true,
-        "title": "Fextify+",
-        "filters": [
-            {
-                "name": "Images",
-                "extensions": ["png", "jpg", "jpeg", "gif"]
-            },
-            {
-                "name": "All Files",
-                "extensions": ["*"]
-            }
-        ]
-    },
-    "shell": {
-        "active": true,
-        "scope": {
-            "allow": [
-                "python",
-                "pip",
-                "git"
-            ]
-        }
     }
+    
+    
   }
 }

@@ -9,21 +9,21 @@
     "start": "npm install && cd src-tauri && cargo run"
   },
   "devDependencies": {
-    "@tauri-apps/cli": "^1.5.0"
+    "@tauri-apps/cli": "2.1.0"
   },
   "dependencies": {
-    "@ckeditor/ckeditor5-markdown-gfm": "^40.0.0",
-    "codemirror": "^5.65.15",
-    "emojione": "^4.5.0",
-    "hypermd": "^0.3.11",
-    "katex": "^0.16.9",
-    "marked": "^9.1.2",
-    "mathjax": "^3.2.2",
-    "turndown": "^7.1.2",
-    "turndown-plugin-gfm": "^1.0.2",
-    "twemoji": "^14.0.2",
-    "@tauri-apps/plugin-clipboard-manager": "^2.0.0",
-    "@tauri-apps/plugin-dialog": "^2.0.0",
-    "@tauri-apps/plugin-shell": "^2.0.0"
+    "@ckeditor/ckeditor5-markdown-gfm": "44.1.0",
+    "codemirror": "6.0.1",
+    "emojione": "4.5.0",
+    "hypermd": "0.3.11",
+    "katex": "0.16.17",
+    "marked": "15.0.4",
+    "mathjax": "3.2.2",
+    "turndown": "7.2.0",
+    "turndown-plugin-gfm": "1.0.2",
+    "twemoji": "14.0.2",
+    "@tauri-apps/plugin-clipboard-manager": "2.2.0",
+    "@tauri-apps/plugin-dialog": "2.2.0",
+    "@tauri-apps/plugin-shell": "2.2.0"
   }
 }
