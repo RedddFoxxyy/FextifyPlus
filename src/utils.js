@@ -1,3 +1,5 @@
+import { writeText, readText } from '@tauri-apps/plugin-clipboard-manager';
+
 async function handleCommandPrompt(text, args) {
     console.log(text)
     switch (text) {
@@ -32,7 +34,7 @@ async function handleCommandPrompt(text, args) {
             handle_switch_quick();
             break;
         case 'Copy HTML output':
-            writeText(document.querySelector('.ck-content').innerHTML);
+            await writeText(document.querySelector('.ck-content').innerHTML);
             toast("HTML output copied to clipboard");
 
             break;

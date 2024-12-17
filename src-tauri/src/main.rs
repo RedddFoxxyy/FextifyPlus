@@ -14,6 +14,9 @@ use directories::ProjectDirs;
 use lazy_static::lazy_static;
 use std::sync::Mutex;
 
+use tauri_plugin_clipboard::{ClipboardExt, ClipKind};
+use tauri_plugin_dialog::DialogExt;
+
 #[derive(Serialize, Deserialize)]
 struct JsonData {
     children: Vec<Child>,
@@ -388,6 +391,8 @@ fn main() {
     save_config();
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_clipboard::init())
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             save_title,
             save_file,

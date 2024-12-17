@@ -21,6 +21,7 @@
     "mathjax": "^3.2.2",
     "turndown": "^7.1.2",
     "turndown-plugin-gfm": "^1.0.2",
-    "twemoji": "^14.0.2"
+    "twemoji": "^14.0.2",
+    "@tauri-apps/plugin-clipboard-manager": "^2.0.0"
   }
 }
