@@ -124,6 +124,20 @@ button {
   border-color: transparent;
 }
 
+.ql-container {
+  background-color: var(--container-color);
+  color: var(--container-text-color);
+  border-radius: 15px;
+  border: none;
+  font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
+}
+
+.ql-editor {
+  background-color: var(--container-color);
+  color: var(--container-text-color);
+  height: 100%;
+}
+
 .rounded-container {
   width: 100%;
   padding: 1em;
@@ -165,6 +179,8 @@ textarea.rounded-container {
   position: fixed;
   align-self: right;
   bottom: 10px;
+  padding: 1em;
+  margin: 2%;
   right: 10px;
   font-size: 0.8em;
   color: #888;

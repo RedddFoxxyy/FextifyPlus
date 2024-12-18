@@ -5,6 +5,9 @@ use prelude::*;
 use serde::{Deserialize, Serialize};
 use wasm_bindgen::prelude::*;
 use wasm_bindgen_futures::spawn_local;
+use wasm_bindgen::closure::Closure;
+use web_sys::{HtmlElement, Window};
+use wasm_bindgen::JsCast;
 use std::time::Duration;
 use serde_json::json;
 use uuid;
@@ -14,6 +17,7 @@ extern "C" {
     #[wasm_bindgen(js_namespace = ["window", "__TAURI__", "core"])]
     async fn invoke(cmd: &str, args: JsValue) -> JsValue;
     fn initialize_quill(editor_id: &str);
+    fn get_quill_content(editor_id: &str) -> String;
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -51,13 +55,79 @@ pub fn App() -> impl IntoView {
         initialize_quill("editor");
     });
 
+    Effect::new(move |_| {
+        // Use spawn_local to handle async operations
+        spawn_local(async move {
+            let window = web_sys::window().expect("No global window exists");
+            let document = window.document().expect("No document exists");
+    
+            // Use JsCast to convert to the right type
+            let editor = document.get_element_by_id("editor")
+                .expect("Editor element not found")
+                .dyn_into::<HtmlElement>()
+                .expect("Failed to cast to HtmlElement");
+    
+            // Use wasm_bindgen to inject JavaScript
+            let closure = Closure::wrap(Box::new(move || {
+                // Get content from Quill
+                let content = get_quill_content("editor");
+                
+                // Update word count
+                let words = count_words(&content);
+                set_word_count.set(words);
+                
+                // Update character count 
+                let chars = content.chars().count();
+                set_char_count.set(chars);
+    
+                // Trigger auto-save
+                spawn_local(async move {
+                    let id = current_id.get();
+                    let title = title_text.get();
+            
+                    // Only save if there's content
+                    if !title.is_empty() || !content.is_empty() {
+                        let args = serde_wasm_bindgen::to_value(&json!({
+                            "id": id,
+                            "title": title,
+                            "content": content
+                        }))
+                        .unwrap();
+            
+                        let _ = invoke("save_document", args).await;
+                    }
+                });
+            }) as Box<dyn Fn()>);
+    
+        // Add event listener using web-sys methods
+        let js_function: &js_sys::Function = closure.as_ref().unchecked_ref();
+        
+        // Inject script to add event listener
+        let script = document.create_element("script").unwrap();
+        script.set_text_content(Some(&format!(r#"
+            if (window.quillEditors && window.quillEditors['editor']) {{
+                window.quillEditors['editor'].on('text-change', () => {{
+                    ({})();
+                }});
+            }}
+        "#, js_function)));
+        
+        document.body().unwrap().append_child(&script).unwrap();
+    
+        // Prevent the closure from being dropped
+        closure.forget();
+        });
+    });
+
     // Auto-save function
     let auto_save = move || {
         spawn_local(async move {
             let id = current_id.get();
             let title = title_text.get();
-            let content = textbox_text.get();
-
+            
+            // Get content directly from Quill
+            let content = get_quill_content("editor");
+    
             // Only save if there's content
             if !title.is_empty() || !content.is_empty() {
                 let args = serde_wasm_bindgen::to_value(&json!({
@@ -66,7 +136,7 @@ pub fn App() -> impl IntoView {
                     "content": content
                 }))
                 .unwrap();
-
+    
                 let _ = invoke("save_document", args).await;
             }
         });
@@ -74,9 +144,16 @@ pub fn App() -> impl IntoView {
 
     // Update word and character counts whenever text changes
     Effect::new(move |_| {
-        let current_text = textbox_text.get();
-        set_word_count.set(count_words(&current_text));
-        set_char_count.set(current_text.chars().count());
+        // Note: You'll need to implement a JS function in your Tauri/frontend to get Quill content
+        let current_text = get_quill_content("editor");
+        
+        // Update word count
+        let words = count_words(&current_text);
+        set_word_count.set(words);
+        
+        // Update character count 
+        let chars = current_text.chars().count();
+        set_char_count.set(chars);
     });
 
     // Debounce auto-save (modify this to debounce less aggressively)
@@ -124,16 +201,13 @@ pub fn App() -> impl IntoView {
         }
     };
 
-    let update_textbox = move |ev: ev::Event| {
-        // Create an async block inside the closure
-        spawn_local(async move {
-            if let Some(input_event) = ev.dyn_into::<web_sys::InputEvent>().ok() {
-                let v = event_target_value(&input_event);
-                set_textbox_text.set(v);
-                
-            }
-        });
-    };
+    // let update_textbox = move |ev: ev::Event| {
+    //     spawn_local(async move {
+    //         let content = get_quill_content("editor");
+    //         set_textbox_text.set(content);
+    //     });
+    // };
+
     // Delete document handler (Ctrl+X)
     let delete_document = move |ev: KeyboardEvent| {
         if ev.ctrl_key() && ev.key() == "x" {
@@ -176,7 +250,7 @@ pub fn App() -> impl IntoView {
             //         on:input=update_textbox
             //     />
             // </div>
-            <div id="editor" class="quillbox-container"></div>
+            <div id="editor" class="quillbox-container ql-container ql-editor"></div>
             <div class="word-char-counter">
                 {move || format!("Words: {} | Characters: {}", word_count.get(), char_count.get())}
             </div>

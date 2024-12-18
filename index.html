@@ -31,13 +31,23 @@
           ['link', 'image', 'video'], // Media
         ];
 
-        const editor = new Quill(`#${editor_id}`, {
+        window.quillEditors = window.quillEditors || {};
+        window.quillEditors[editor_id] = new Quill(`#${editor_id}`, {
           modules: {
             toolbar: toolbarOptions,
           },
           theme: 'snow', // Use the 'snow' theme
         });
         console.log("Quill editor initialized!");
+        window.quillEditors[editor_id].on('text-change', (delta, oldDelta, source) => {
+            if (source === 'user') {
+                console.log('Text changed by user');
+            }
+        });
+      }
+      function get_quill_content(editor_id) {
+        const editor = window.quillEditors[editor_id];
+        return editor ? editor.getText() : '';
       }
     </script>
   </head>
