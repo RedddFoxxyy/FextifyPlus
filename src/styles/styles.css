@@ -12,6 +12,26 @@
 
   --container-color: #1b1b1b;
   --container-text-color: #e0e0e0;
+  --container-crust: #2c2c2c;
+
+  /* Base colors */
+  --bg-darkest: #0f0f0f;
+  --bg-container: #1b1b1b;
+  --bg-interactive: #2a2a2a;
+  --bg-hover: #3a3a3a;
+  --bg-active: #404040;
+  
+  /* Border colors */
+  --border-color: #404040;
+  
+  /* Text colors */
+  --text-primary: #e0e0e0;
+  --text-secondary: #a0a0a0;
+  --text-placeholder: #707070;
+  --text-hover: #ffffff;
+  
+  /* Shadow color */
+  --shadow-color: rgba(0, 0, 0, 0.4);
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -223,31 +243,71 @@ textarea.rounded-container {
   overflow: auto;
   background-color: var(--container-color);
   color: var(--container-text-color);
-  padding: 1em;
+  /* padding: 1em; */
 }
 
-/* Editor.js specific styles */
 .codex-editor {
   width: 100%;
-  padding: 0 !important; /* Remove default padding */
+  padding: 0.5% !important; /* Remove default padding */
 }
 
-.ce-block__content {
-  max-width: 100% !important;
-  margin: 0 !important;
-  padding: 0 !important;
+/* Target the Editor.js content container */
+.codex-editor__redactor {
+  padding: 2% !important;
 }
 
+.ce-inline-toolbar {
+  left: 2% !important;  /* Match left padding */
+   /* Account for left and right padding */
+}
+
+/* Plus button positioning */
 .ce-toolbar__plus {
-  color: var(--container-text-color);
-  left: -2px !important; /* Align plus button to the left */
+  left: -10px !important;
+  opacity: 1 !important;
+  color: var(--container-text-color)
+}
+
+.ce-toolbar__plus:hover {
+  color: var(--text-hover) !important;
+  background: var(--bg-hover) !important;
+}
+
+/* Block tunes (settings button) positioning */
+.ce-toolbar__actions {
+  right: -10px !important;
+  opacity: 1 !important;
+  color: var(--container-text-color)
 }
 
 .ce-toolbar__settings-btn {
-  color: var(--container-text-color);
+  color: var(--text-secondary) !important;
+  background: var(--bg-container) !important;
 }
 
+.ce-toolbar__settings-btn:hover {
+  color: var(--text-hover) !important;
+  background: var(--bg-hover) !important;
+}
 
+/* Ensure blocks within Editor.js are left-aligned */
+.ce-block {
+  text-align: left;
+}
+
+/* Adjust the block alignment specifically */
+.ce-block__content {
+  max-width: 100%;
+  margin: 0;
+  position: relative;
+  text-align: left;
+}
+
+/* Ensure paragraphs and other content is left-aligned */
+.ce-paragraph,
+.ce-header {
+  text-align: left;
+}
 
 /* @media (prefers-color-scheme: dark) {
   :root {
