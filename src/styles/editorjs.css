@@ -1,0 +1,124 @@
+.codex-editor {
+    width: 100%;
+    padding: 0.5% !important; /* Remove default padding */
+  }
+  
+  /* Target the Editor.js content container */
+  .codex-editor__redactor {
+    padding: 2% !important;
+  }
+  
+  .ce-inline-toolbar {
+    left: 2% !important;  /* Match left padding */
+     /* Account for left and right padding */
+  }
+  
+  /* Plus button positioning */
+  .ce-toolbar__plus {
+    left: -10px !important;
+    opacity: 1 !important;
+    color: var(--container-text-color)
+  }
+  
+  .ce-toolbar__plus:hover {
+    color: var(--text-hover) !important;
+    background: var(--bg-hover) !important;
+  }
+  
+  /* Block tunes (settings button) positioning */
+  .ce-toolbar__actions {
+    right: -10px !important;
+    opacity: 1 !important;
+    color: var(--container-text-color)
+  }
+  
+  .ce-toolbar__settings-btn {
+    color: var(--text-secondary) !important;
+    background: var(--bg-container) !important;
+  }
+  
+  .ce-toolbar__settings-btn:hover {
+    color: var(--text-hover) !important;
+    background: var(--bg-hover) !important;
+  }
+  
+  /* Selection highlight styling */
+  .ce-paragraph[data-placeholder]:empty::before {
+    color: var(--text-placeholder) !important;
+  }
+  
+  /* Selected block highlight */
+  .ce-block--selected {
+    background-color: var(--bg-interactive) !important;
+  }
+  
+  /* Settings menu styling */
+  .ce-settings,
+  .ce-toolbar__settings-button {
+    background: var(--bg-container) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: 6px;
+    box-shadow: 0 3px 15px var(--shadow-color) !important;
+  }
+  
+  .ce-popover__container {
+    background: var(--bg-container) !important;
+    color: var(--text-primary)
+  }
+  
+  .ce-popover__items {
+    background: var(--bg-container) !important;
+    color: var(--text-primary)
+  }
+  
+  /* Menu items styling */
+  .ce-settings__button,
+  .ce-conversion-tool {
+    color: var(--text-primary) !important;
+    background: var(--bg-container) !important;
+  }
+  
+  /* Menu item hover state */
+  .ce-settings__button:hover,
+  .ce-conversion-tool:hover {
+    background-color: var(--bg-hover) !important;
+    color: var(--text-hover) !important;
+  }
+  
+  /* Conversion button icon color */
+  .ce-conversion-tool__icon {
+    color: var(--text-secondary) !important;
+  }
+  
+  /* Selected menu item */
+  .ce-settings__button--active,
+  .ce-conversion-tool--active {
+    color: var(--text-hover) !important;
+    background-color: var(--bg-active) !important;
+  }
+  
+  /* Settings popup arrow */
+  .ce-settings:before,
+  .ce-settings:after {
+    background-color: var(--bg-container) !important;
+    border-color: var(--border-color) !important;
+  }
+  
+  /* Ensure blocks within Editor.js are left-aligned */
+  .ce-block {
+    text-align: left;
+  }
+  
+  /* Adjust the block alignment specifically */
+  .ce-block__content {
+    max-width: 100%;
+    margin: 0;
+    position: relative;
+    text-align: left;
+  }
+  
+  /* Ensure paragraphs and other content is left-aligned */
+  .ce-paragraph,
+  .ce-header {
+    text-align: left;
+  }

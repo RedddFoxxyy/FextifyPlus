@@ -1,6 +1,5 @@
-.logo.leptos:hover {
-  filter: drop-shadow(0 0 2em #a82e20);
-}
+@import 'editorjs.css';
+
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
   font-size: 16px;
@@ -44,21 +43,6 @@ html, body {
   height: 100%;
   margin: 0;
   padding: 0;
-}
-
-.container {
-  height: 100vh; /* Set container to full viewport height */
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-}
-
-.row {
-  display: flex;
-  justify-content: center;
 }
 
 a {
@@ -105,8 +89,19 @@ button {
   outline: none;
 }
 
-#greet-input {
-  margin-right: 5px;
+.container {
+  height: 100vh; /* Set container to full viewport height */
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+}
+
+.row {
+  display: flex;
+  justify-content: center;
 }
 
 .title-container {
@@ -120,30 +115,6 @@ button {
   min-height: 100px;
   max-height: 200px;
   z-index: 10;
-}
-
-.textbox-container {
-  flex-grow: 0; /* Allow textbox container to grow and fill remaining space */
-  display: flex;
-  padding: 0.5%;
-  width: 80%;
-  height: 100%;
-  justify-content: center;
-  max-width: 700px;
-  /* z-index: 10; */
-}
-
-.quillbox-container {
-  flex-grow: 1; /* Allow textbox container to grow and fill remaining space */
-  display: flex;
-  margin: 0.5%;
-  margin-bottom: 1%;
-  width: 80%;
-  height: 100%;
-  max-width: 700px;
-  border-radius: 15px;
-  border-color: transparent;
-  overflow: hidden;
 }
 
 .rounded-container {
@@ -244,69 +215,6 @@ textarea.rounded-container {
   background-color: var(--container-color);
   color: var(--container-text-color);
   /* padding: 1em; */
-}
-
-.codex-editor {
-  width: 100%;
-  padding: 0.5% !important; /* Remove default padding */
-}
-
-/* Target the Editor.js content container */
-.codex-editor__redactor {
-  padding: 2% !important;
-}
-
-.ce-inline-toolbar {
-  left: 2% !important;  /* Match left padding */
-   /* Account for left and right padding */
-}
-
-/* Plus button positioning */
-.ce-toolbar__plus {
-  left: -10px !important;
-  opacity: 1 !important;
-  color: var(--container-text-color)
-}
-
-.ce-toolbar__plus:hover {
-  color: var(--text-hover) !important;
-  background: var(--bg-hover) !important;
-}
-
-/* Block tunes (settings button) positioning */
-.ce-toolbar__actions {
-  right: -10px !important;
-  opacity: 1 !important;
-  color: var(--container-text-color)
-}
-
-.ce-toolbar__settings-btn {
-  color: var(--text-secondary) !important;
-  background: var(--bg-container) !important;
-}
-
-.ce-toolbar__settings-btn:hover {
-  color: var(--text-hover) !important;
-  background: var(--bg-hover) !important;
-}
-
-/* Ensure blocks within Editor.js are left-aligned */
-.ce-block {
-  text-align: left;
-}
-
-/* Adjust the block alignment specifically */
-.ce-block__content {
-  max-width: 100%;
-  margin: 0;
-  position: relative;
-  text-align: left;
-}
-
-/* Ensure paragraphs and other content is left-aligned */
-.ce-paragraph,
-.ce-header {
-  text-align: left;
 }
 
 /* @media (prefers-color-scheme: dark) {
