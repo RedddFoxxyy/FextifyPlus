@@ -1,3 +1,4 @@
+
 .codex-editor {
     width: 100%;
     padding: 0.5% !important; /* Remove default padding */
@@ -48,9 +49,9 @@
   }
   
   /* Selected block highlight */
-  .ce-block--selected {
-    background-color: var(--bg-interactive) !important;
-  }
+  /* .ce-block--selected {
+    background: var(--bg-interactive) !important;
+  } */
   
   /* Settings menu styling */
   .ce-settings,
@@ -60,15 +61,34 @@
     border-radius: 6px;
     box-shadow: 0 3px 15px var(--shadow-color) !important;
   }
-  
-  .ce-popover__container {
-    background: var(--bg-container) !important;
-    color: var(--text-primary)
-  }
-  
-  .ce-popover__items {
-    background: var(--bg-container) !important;
-    color: var(--text-primary)
+
+  .ce-popover {
+    --border-radius: 0px;
+    --width: 200px;
+    --max-height: 270px;
+    --padding: 6px;
+    --offset-from-target: 8px;
+    --color-border: var(--border-color);
+    --color-shadow: rgba(13, 20, 33, 0.10);
+    --color-background: var(--bg-interactive) !important;
+    --color-text-primary: var(--color-text-primary) !important;
+    --color-text-secondary: var(--color-text-secondary);
+    --color-border-icon: rgb(201 201 204 / 48%);
+    --color-border-icon-disabled: #EFF0F1;
+    --color-text-icon-active: #388AE5;
+    --color-background-icon-active: rgba(56, 138, 229, 0.1);
+    --color-background-item-focus: rgba(34, 186, 255, 0.08);
+    --color-shadow-item-focus: rgba(7, 161, 227, 0.08);
+    --color-background-item-hover: #F8F8F8;
+    --color-background-item-confirm: #E24A4A;
+    --color-background-item-confirm-hover: #CE4343;
+    --popover-top: calc(100% + var(--offset-from-target));
+    --popover-left: 0;
+    --nested-popover-overlap: 4px;
+
+    --icon-size: 20px;
+    --item-padding: 3px;
+    --item-height: calc(var(--icon-size) + 2 * var(--item-padding));
   }
   
   /* Menu items styling */

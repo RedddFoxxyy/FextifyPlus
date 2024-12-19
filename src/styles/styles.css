@@ -32,6 +32,9 @@
   /* Shadow color */
   --shadow-color: rgba(0, 0, 0, 0.4);
 
+  --selectionColor: var(--bg-interactive);
+  --inlineSelectionColor: var(--bg-interactive);
+
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
