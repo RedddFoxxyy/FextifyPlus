@@ -13,6 +13,13 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@editorjs/code": "^2.9.3",
+    "@editorjs/editorjs": "^2.30.7",
+    "@editorjs/header": "^2.8.8",
+    "@editorjs/inline-code": "^1.5.1",
+    "@editorjs/list": "^2.0.2",
+    "@editorjs/marker": "^1.4.0",
+    "@editorjs/quote": "^2.7.6",
     "@tauri-apps/api": "^2.1.1",
     "@tauri-apps/plugin-opener": "^2",
     "@types/quill": "^2.0.14",

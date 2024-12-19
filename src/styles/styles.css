@@ -210,6 +210,45 @@ textarea.rounded-container {
   cursor: pointer;
 }
 
+.editorjs-container {
+  flex-grow: 1;
+  display: flex;
+  margin: 0.5%;
+  margin-bottom: 1%;
+  width: 80%;
+  height: 100%;
+  max-width: 700px;
+  border-radius: 15px;
+  border-color: transparent;
+  overflow: auto;
+  background-color: var(--container-color);
+  color: var(--container-text-color);
+  padding: 1em;
+}
+
+/* Editor.js specific styles */
+.codex-editor {
+  width: 100%;
+  padding: 0 !important; /* Remove default padding */
+}
+
+.ce-block__content {
+  max-width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.ce-toolbar__plus {
+  color: var(--container-text-color);
+  left: -2px !important; /* Align plus button to the left */
+}
+
+.ce-toolbar__settings-btn {
+  color: var(--container-text-color);
+}
+
+
+
 /* @media (prefers-color-scheme: dark) {
   :root {
     color: #f6f6f6;

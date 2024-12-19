@@ -3,9 +3,14 @@
   import { onMount } from 'svelte';
   import { invoke } from "@tauri-apps/api/core";
   import '../styles/styles.css';
-  import '../styles/quill-dark-theme.css';
   import { v4 as uuidv4 } from 'uuid';
-  import Quill from 'quill';
+  import EditorJS from '@editorjs/editorjs';
+  import Header from '@editorjs/header';
+  import List from '@editorjs/list';
+  import CodeTool from '@editorjs/code';
+  import Quote from '@editorjs/quote';
+  import Marker from '@editorjs/marker';
+  import InlineCode from '@editorjs/inline-code';
 
   // State management
   let titleText = $state('');
@@ -14,58 +19,46 @@
   let currentId = $state('');
   let wordCount = $state(0);
   let charCount = $state(0);
-  let isToolbarVisible = $state(false);
-  let tabCount = $state(1);
   let tabs = $state([]);
 
-  // Initialize Quill
-  let quill;
-  const toolbarOptions = [
-          ['bold', 'italic', 'underline', 'strike'], // Formatting buttons
-          ['blockquote', 'code-block'], // Block types
-
-          [{ header: 1 }, { header: 2 }], // Header options
-          [{ list: 'ordered' }, { list: 'bullet' }], // List options
-          [{ script: 'sub' }, { script: 'super' }], // Subscript/Superscript
-          [{ indent: '-1' }, { indent: '+1' }], // Indent
-          [{ direction: 'rtl' }], // Text direction
-
-          [{ size: ['small', false, 'large', 'huge'] }], // Font size
-          [{ header: [1, 2, 3, 4, 5, 6, false] }], // Header levels
-
-          [{ color: [] }, { background: [] }], // Text color and background
-          [{ font: [] }], // Font family
-          [{ align: [] }], // Text alignment
-
-          ['clean'], // Remove formatting
-          ['link', 'image', 'video'], // Media
-        ];
+  // Initialize Editor.js
+  let editor;
+  const EDITOR_JS_TOOLS = {
+    header: {
+      class: Header,
+      inlineToolbar: true
+    },
+    list: {
+      class: List,
+      inlineToolbar: true
+    },
+    code: CodeTool,
+    quote: Quote,
+    marker: Marker,
+    inlineCode: InlineCode
+  };
 
   onMount(() => {
-    // Initialize Quill editor
-    quill = new Quill('#editor', {
-      theme: 'snow',
+    // Initialize Editor.js
+    editor = new EditorJS({
+      holder: 'editor',
+      tools: EDITOR_JS_TOOLS,
       placeholder: 'start typing...',
-      modules: {
-            toolbar: toolbarOptions,
-          },
-      bounds: '#editor'
-    });
-
-    document.querySelector('#editor').classList.add('quill-dark-theme');
-    document.querySelector('.ql-toolbar').style.display = 'none';
-
-    quill.on('text-change', () => {
-        const text = quill.getText() || '';
+      onChange: async () => {
+        const data = await editor.save();
+        const text = data.blocks
+          .map(block => block.data.text || '')
+          .join(' ');
         wordCount = countWords(text);
-        charCount = Math.max(0, text.length - 1);
+        charCount = text.length;
+      },
     });
-    
+
     loadRecentDocuments();
     
     // If no documents were loaded, create a new tab
     if (recentDocuments.length === 0) {
-      addnewtab()
+      addnewtab();
     }
 
     // Set up auto-save
@@ -73,6 +66,9 @@
 
     return () => {
       clearInterval(autoSaveInterval);
+      if (editor) {
+        editor.destroy();
+      }
     };
   });
 
@@ -82,38 +78,41 @@
 
   async function addnewtab() {
     const newTab = await invoke('new_tab');
-      tabs = [newTab];
-      currentId = newTab.id;
+    tabs = [newTab];
+    currentId = newTab.id;
   }
 
   async function switchTab(tabId) {
     try {
-        const docResult = await invoke('get_document_content', { id: tabId });
-        
-        if (docResult) {
-            // Document exists, load its content
-            currentId = tabId;
-            titleText = docResult.title;
-            quill?.setContents(JSON.parse(docResult.content));
-        } else {
-            // No document exists for this tab (new tab)
-            currentId = tabId;
-            titleText = '';
-            quill?.setContents([]);
+      const docResult = await invoke('get_document_content', { id: tabId });
+      
+      if (docResult) {
+        currentId = tabId;
+        titleText = docResult.title;
+        if (editor) {
+          editor.render(JSON.parse(docResult.content));
         }
+      } else {
+        currentId = tabId;
+        titleText = '';
+        if (editor) {
+          editor.clear();
+        }
+      }
     } catch (error) {
-        console.error('Failed to switch tab:', error);
+      console.error('Failed to switch tab:', error);
     }
-}
+  }
 
   async function autoSave() {
-    if (!titleText && !quill?.getText().trim()) return;
+    if (!titleText && !editor) return;
 
     try {
+      const savedData = await editor.save();
       await invoke('save_document', {
         id: currentId,
         title: titleText,
-        content: JSON.stringify(quill.getContents())
+        content: JSON.stringify(savedData)
       });
     } catch (error) {
       console.error('Auto-save failed:', error);
@@ -126,18 +125,18 @@
       recentDocuments = docs;
       
       if (recentDocuments.length > 0) {
-        // Create tabs for each loaded document
         tabs = recentDocuments.map(doc => ({
           order: tabs.length + 1,
           id: doc.id,
           title: doc.title
         }));
         
-        // Load the last document
         const lastDoc = recentDocuments[recentDocuments.length - 1];
         currentId = lastDoc.id;
         titleText = lastDoc.title;
-        quill?.setContents(JSON.parse(lastDoc.content));
+        if (editor) {
+          editor.render(JSON.parse(lastDoc.content));
+        }
       }
     } catch (error) {
       console.error('Failed to load documents:', error);
@@ -157,19 +156,6 @@
       event.preventDefault();
       newDocument();
     }
-    if (event.ctrlKey && event.key === 't') {
-      event.preventDefault();
-      toggleToolbar();
-    }
-  }
-
-  // New function to toggle toolbar
-  function toggleToolbar() {
-    isToolbarVisible = !isToolbarVisible;
-    const toolbar = document.querySelector('.ql-toolbar');
-    if (toolbar) {
-      toolbar.style.display = isToolbarVisible ? 'block' : 'none';
-    }
   }
 
   async function deleteDocument() {
@@ -178,14 +164,14 @@
       tabs = tabs.filter(tab => tab.id !== currentId);
       
       if (tabs.length > 0) {
-        // Switch to the last remaining tab
         const lastTab = tabs[tabs.length - 1];
         currentId = lastTab.id;
         const docResult = await invoke('get_document_content', { id: currentId });
         titleText = docResult.title;
-        quill?.setContents(JSON.parse(docResult.content));
+        if (editor) {
+          editor.render(JSON.parse(docResult.content));
+        }
       } else {
-        // If no tabs remain, create a new one
         await invoke('reset_tab_order_count')
         await newDocument();
       }
@@ -200,20 +186,13 @@
       tabs = [...tabs, newTab];
       currentId = newTab.id;
       titleText = '';
-      quill?.setContents([]);
+      if (editor) {
+        editor.clear();
+      }
     } catch (error) {
       console.error('Failed to create new document:', error);
     }
   }
-
-  // Update word and character counts when text changes
-  $effect(() => {
-      if (quill) {
-          const text = quill.getText() || '';
-          wordCount = countWords(text);
-          charCount = Math.max(0, text.length - 1);
-      }
-  });
 </script>
 
 <svelte:window on:keydown={handleKeydown}/>
@@ -228,7 +207,7 @@
     ></textarea>
   </div>
   
-  <div id="editor" class="quillbox-container"></div>
+  <div id="editor" class="editorjs-container"></div>
   
   <div class="word-char-counter">
     {wordCount} Words {charCount} Characters
